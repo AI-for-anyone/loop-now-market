@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  check:
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,19 +15,45 @@ jobs:
           node-version: 24
       - name: 格式检查
         run: node scripts/check.mjs
-      # 取回每个条目并用 Loop Now 的插件宿主校验。loop-now 仓库公开前需要在本仓库的 secrets 里放一个
-      # 能读取它的 LOOP_NOW_REPO_TOKEN；公开后默认令牌即可。
+
+  # 取回每个条目并用 Loop Now 的插件宿主校验。需要能读取 AI-for-anyone/loop-now：
+  # 它公开后默认令牌即可；私有期间在本仓库 secrets 里放一个只读的 LOOP_NOW_REPO_TOKEN，否则这一段跳过并给出警告。
+  fetch:
+    needs: format
+    runs-on: ubuntu-latest
+    env:
+      LOOP_NOW_REPO_TOKEN: ${{ secrets.LOOP_NOW_REPO_TOKEN }}
+    steps:
       - uses: actions/checkout@v4
+      - name: 检查能否读取 loop-now 仓库
+        id: access
+        env:
+          GH_TOKEN: ${{ env.LOOP_NOW_REPO_TOKEN || github.token }}
+        run: |
+          if gh api repos/AI-for-anyone/loop-now --silent; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::读不到 AI-for-anyone/loop-now（仓库私有且未配置 LOOP_NOW_REPO_TOKEN），跳过取回校验"
+          fi
+      - if: steps.access.outputs.ok == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - if: steps.access.outputs.ok == 'true'
+        uses: actions/checkout@v4
         with:
           repository: AI-for-anyone/loop-now
           path: .loop-now
-          token: ${{ secrets.LOOP_NOW_REPO_TOKEN || github.token }}
-      - name: 构建插件宿主
+          token: ${{ env.LOOP_NOW_REPO_TOKEN || github.token }}
+      - if: steps.access.outputs.ok == 'true'
+        name: 构建插件宿主
         working-directory: .loop-now/plugins
         run: |
           npm ci --ignore-scripts --no-audit --no-fund
           npm run build
-      - name: 取回并校验每个条目
+      - if: steps.access.outputs.ok == 'true'
+        name: 取回并校验每个条目
         env:
           LOOP_NOW_HOST_ENTRY: ${{ github.workspace }}/.loop-now/plugins/host/dist/main.js
         run: node scripts/check.mjs --fetch
