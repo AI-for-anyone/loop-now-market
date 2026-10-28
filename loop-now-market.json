@@ -1,4 +1,13 @@
 {
   "name": "Loop Now 官方插件市场",
-  "plugins": []
+  "plugins": [
+    {
+      "id": "slack",
+      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-slack@v0.1.0",
+      "version": "0.1.0",
+      "displayName": "Slack",
+      "description": "在 Slack 频道或私信里和项目 Manager 对话；代管一个外部身份，让 Agent 的消息和提问到 Slack 里找人。Socket Mode，不需要公网地址。",
+      "verified": true
+    }
+  ]
 }
