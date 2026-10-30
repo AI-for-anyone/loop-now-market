@@ -3,10 +3,13 @@
   "plugins": [
     {
       "id": "slack",
-      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-slack@v0.1.1",
-      "version": "0.1.1",
+      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-slack@v0.1.2",
+      "version": "0.1.2",
       "displayName": "Slack",
-      "description": "在 Slack 频道或私信里和项目 Manager 对话；代管一个外部身份，让 Agent 的消息和提问到 Slack 里找人。Socket Mode，不需要公网地址。",
+      "description": {
+        "zh-CN": "在 Slack 频道或私信里和项目 Manager 对话；代管一个外部身份，让 Agent 的消息和提问到 Slack 里找人。Socket Mode，不需要公网地址。",
+        "en-US": "Talk to a project's Manager from Slack channels or DMs; let a plugin-managed external identity bring agents' messages and questions to people on Slack. Socket Mode, no public URL needed."
+      },
       "verified": true
     }
   ]
