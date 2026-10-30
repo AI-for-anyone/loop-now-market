@@ -15,6 +15,8 @@ jobs:
           node-version: 24
       - name: 格式检查
         run: node scripts/check.mjs
+      - name: 检查脚本的测试
+        run: node --test scripts/check.test.mjs
 
   # 取回每个条目并用 Loop Now 的插件宿主校验。需要能读取 AI-for-anyone/loop-now：
   # 它公开后默认令牌即可；私有期间在本仓库 secrets 里放一个只读的 LOOP_NOW_REPO_TOKEN，否则这一段跳过并给出警告。

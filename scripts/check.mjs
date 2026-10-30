@@ -14,6 +14,8 @@ const ID = /^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$/
 const VERSION = /^[0-9A-Za-z][0-9A-Za-z.+-]{0,63}$/
 const NPM_NAME = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 const KEYS = ['id', 'source', 'version', 'displayName', 'description', 'verified']
+// displayName、description 可以按语言写（Loop Now plugins/SPEC.md §2）：键是语言标签，按 BCP 47 的写法。
+const LANGUAGE_TAG = /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$/
 
 const args = process.argv.slice(2)
 const doFetch = args.includes('--fetch')
@@ -55,8 +57,8 @@ entries.forEach((entry, index) => {
   else if (seen.has(entry.id)) fail(`${label}：id 重复`)
   else seen.add(entry.id)
   if (typeof entry.version !== 'string' || !VERSION.test(entry.version)) fail(`${label}：version 写法不对`)
-  if (typeof entry.displayName !== 'string' || !entry.displayName.trim()) fail(`${label}：displayName 须是非空字符串`)
-  if (typeof entry.description !== 'string' || !entry.description.trim() || entry.description.length > 200) fail(`${label}：description 须是 1 到 200 个字符`)
+  if (!localized(entry.displayName)) fail(`${label}：displayName 须是非空字符串，或以语言标签（如 zh-CN、en-US）为键、非空字符串为值的对象，至少一项`)
+  if (!localized(entry.description, 200)) fail(`${label}：description 须是 1 到 200 个字符，或以语言标签（如 zh-CN、en-US）为键、每项 1 到 200 个字符的对象，至少一项`)
   if (typeof entry.verified !== 'boolean') fail(`${label}：verified 须是 true 或 false`)
   const source = parseSource(entry.source, label)
   if (source) parsed.push({ ...entry, ...source, label })
@@ -65,6 +67,15 @@ entries.forEach((entry, index) => {
 const ids = entries.map((entry) => entry?.id).filter((id) => typeof id === 'string')
 const sorted = [...ids].sort()
 if (ids.some((id, index) => id !== sorted[index])) fail('条目须按 id 字母顺序排列')
+
+/** 字符串，或以语言标签为键的对象（至少一项）；每段文字去掉首尾空白后非空，给了 max 时不超过 max 个字符。 */
+function localized(value, max) {
+  const text = (t) => typeof t === 'string' && t.trim() !== '' && (max === undefined || t.length <= max)
+  if (typeof value === 'string') return text(value)
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const entries = Object.entries(value)
+  return entries.length > 0 && entries.every(([tag, t]) => LANGUAGE_TAG.test(tag) && text(t))
+}
 
 function parseSource(source, label) {
   if (typeof source !== 'string') return fail(`${label}：source 须是字符串`)
