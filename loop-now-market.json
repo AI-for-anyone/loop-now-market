@@ -3,8 +3,8 @@
   "plugins": [
     {
       "id": "figma",
-      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-figma@v0.1.0",
-      "version": "0.1.0",
+      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-figma@v0.1.1",
+      "version": "0.1.1",
       "displayName": "Figma",
       "description": {
         "zh-CN": "让 Agent 通过本机 Figma 桌面版的官方 MCP 读取设计稿：结构、截图、变量和 Code Connect。需要桌面版开启 desktop MCP server。",
@@ -14,8 +14,8 @@
     },
     {
       "id": "slack",
-      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-slack@v0.1.2",
-      "version": "0.1.2",
+      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-slack@v0.1.3",
+      "version": "0.1.3",
       "displayName": "Slack",
       "description": {
         "zh-CN": "在 Slack 频道或私信里和项目 Manager 对话；代管一个外部身份，让 Agent 的消息和提问到 Slack 里找人。Socket Mode，不需要公网地址。",
