@@ -2,6 +2,17 @@
   "name": "Loop Now 官方插件市场",
   "plugins": [
     {
+      "id": "figma",
+      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-figma@v0.1.0",
+      "version": "0.1.0",
+      "displayName": "Figma",
+      "description": {
+        "zh-CN": "让 Agent 通过本机 Figma 桌面版的官方 MCP 读取设计稿：结构、截图、变量和 Code Connect。需要桌面版开启 desktop MCP server。",
+        "en-US": "Give agents Figma's official desktop MCP server: design context, screenshots, variables and Code Connect from the Figma desktop app running on this machine."
+      },
+      "verified": true
+    },
+    {
       "id": "slack",
       "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-slack@v0.1.2",
       "version": "0.1.2",
