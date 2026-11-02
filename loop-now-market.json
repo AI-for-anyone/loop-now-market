@@ -14,8 +14,8 @@
     },
     {
       "id": "open-design",
-      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-open-design@v0.1.0",
-      "version": "0.1.0",
+      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-open-design@v0.1.1",
+      "version": "0.1.1",
       "displayName": "Open Design",
       "description": {
         "zh-CN": "让 Agent 通过 Open Design 桌面版的 MCP 服务器生成和修改设计稿、网页原型、演示稿与图片，并读取项目文件。生成用 Open Design 自己的运行时。",
