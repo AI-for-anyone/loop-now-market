@@ -35,7 +35,7 @@ https://raw.githubusercontent.com/AI-for-anyone/loop-now-market/main/loop-now-ma
 1. 插件须通过 Loop Now 仓库里宿主的校验：`node plugins/host/dist/main.js validate <插件目录>`。插件写法见 Loop Now 仓库的 `plugins/SPEC.md` 与 `plugins/official/hello`。
 2. Fork 本仓库，在 `loop-now-market.json` 里加上或修改你的条目。
 3. 本地检查：`node scripts/check.mjs` 只查格式；`node scripts/check.mjs --fetch` 会取回每个条目并核对清单里的 id 与版本（需要 git 与 npm；设置 `LOOP_NOW_HOST_ENTRY` 指向宿主的 `main.js` 时会同时运行宿主校验）。
-4. 开 PR，说明插件做什么、Agent 半边和平台半边各有什么、订阅的事件和申请的权限。CI 跑的就是上面的检查。
+4. 开 PR，说明插件做什么、Agent 侧和平台侧各有什么、订阅的事件和申请的权限。CI 跑的就是上面的检查。
 
 ## 自建市场
 
