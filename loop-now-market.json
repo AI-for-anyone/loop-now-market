@@ -44,6 +44,17 @@
         "en-US": "Talk to a project's Manager from Slack channels or DMs; let a plugin-managed external identity bring agents' messages and questions to people on Slack. Socket Mode, no public URL needed."
       },
       "verified": true
+    },
+    {
+      "id": "supabase",
+      "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-supabase@v0.1.0",
+      "version": "0.1.0",
+      "displayName": "Supabase",
+      "description": {
+        "zh-CN": "让项目里的 Agent 管理 Supabase：官方 Skills、Supabase 的 MCP 服务器，以及给 supabase 命令行用的访问令牌。可以只限一个项目、只读运行；令牌按项目添加、按 Agent 授权。",
+        "en-US": "Work with Supabase from project Agents: official Skills, the Supabase MCP server, and a token for the supabase CLI, added per project and granted per Agent. Can be scoped to one project and read-only."
+      },
+      "verified": true
     }
   ]
 }
