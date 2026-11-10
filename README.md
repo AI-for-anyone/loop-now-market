@@ -27,6 +27,7 @@ https://raw.githubusercontent.com/AI-for-anyone/loop-now-market/main/loop-now-ma
 - 一个插件一条，按 `id` 字母顺序排列。`id` 必须与插件 `package.json` 里 `loopNow.id` 一致。
 - `displayName`、`description` 可以写成字符串，也可以按语言写成对象，如 `{ "zh-CN": "示例插件", "en-US": "Example plugin" }`：键是语言标签（zh-CN、en-US、en 等），至少一项；`description` 每项 1 到 200 个字符。Loop Now 按控制台的语言显示。
 - `source` 写 `git:<https 地址>@<tag>` 或 `npm:<包名>`。`version` 是当前收录的版本；git 条目的 tag 必须对应这个版本，npm 条目的版本必须已发布。
+- `providerState`（可选）：插件是一个注册了订阅登录模型提供方的 Pi 扩展时，声明哪些 HOME 下的相对路径随项目账号保存，如 `{ "grok-cli": { "paths": [".pi/grok-cli"] } }`；键是提供方 id，每个提供方 1 到 8 个不含 `..` 的相对路径。需要支持插件提供方的 Loop Now 版本，旧版本会忽略这个字段。
 - 发新版本同样提 PR，改 tag（或只改 `version`）。Loop Now 按 `version` 判断是否提示更新；安装时固定到精确的提交或 npm 版本，不会自动升级。
 - 收录进官方市场的插件在 Loop Now 里免确认安装，所以每条都会被维护者审阅。`verified` 只对非官方市场有意义：其他市场里标为 `true` 的条目同样免确认。
 

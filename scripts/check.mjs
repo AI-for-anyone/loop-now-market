@@ -13,7 +13,7 @@ import { spawnSync } from 'node:child_process'
 const ID = /^[a-z0-9]([a-z0-9-]{0,62}[a-z0-9])?$/
 const VERSION = /^[0-9A-Za-z][0-9A-Za-z.+-]{0,63}$/
 const NPM_NAME = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
-const KEYS = ['id', 'source', 'version', 'displayName', 'description', 'verified']
+const KEYS = ['id', 'source', 'version', 'displayName', 'description', 'verified', 'providerState']
 // displayName、description 可以按语言写（Loop Now plugins/SPEC.md §2）：键是语言标签，按 BCP 47 的写法。
 const LANGUAGE_TAG = /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$/
 
@@ -52,7 +52,7 @@ entries.forEach((entry, index) => {
   if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return fail(`${where} 须是对象`)
   const label = typeof entry.id === 'string' && entry.id ? entry.id : where
   for (const key of Object.keys(entry)) if (!KEYS.includes(key)) fail(`${label}：不认识的字段 ${key}`)
-  for (const key of KEYS) if (!(key in entry)) fail(`${label}：缺少 ${key}`)
+  for (const key of KEYS) if (key !== 'providerState' && !(key in entry)) fail(`${label}：缺少 ${key}`)
   if (typeof entry.id !== 'string' || !ID.test(entry.id)) fail(`${label}：id 须是小写字母、数字和连字符，1 到 64 个字符`)
   else if (seen.has(entry.id)) fail(`${label}：id 重复`)
   else seen.add(entry.id)
@@ -60,6 +60,31 @@ entries.forEach((entry, index) => {
   if (!localized(entry.displayName)) fail(`${label}：displayName 须是非空字符串，或以语言标签（如 zh-CN、en-US）为键、非空字符串为值的对象，至少一项`)
   if (!localized(entry.description, 200)) fail(`${label}：description 须是 1 到 200 个字符，或以语言标签（如 zh-CN、en-US）为键、每项 1 到 200 个字符的对象，至少一项`)
   if (typeof entry.verified !== 'boolean') fail(`${label}：verified 须是 true 或 false`)
+  // providerState（可选）：插件注册的模型提供方有哪些 HOME 下的相对路径随项目账号保存。
+  if (entry.providerState !== undefined) {
+    const ps = entry.providerState
+    if (!ps || typeof ps !== 'object' || Array.isArray(ps) || Object.keys(ps).length === 0) {
+      fail(`${label}：providerState 须是以提供方 id 为键的非空对象`)
+    } else {
+      for (const [provider, state] of Object.entries(ps)) {
+        const paths = state && !Array.isArray(state) ? state.paths : undefined
+        const ok =
+          Array.isArray(paths) &&
+          paths.length >= 1 &&
+          paths.length <= 8 &&
+          paths.every(
+            (p) =>
+              typeof p === 'string' &&
+              p !== '' &&
+              p !== '.' &&
+              !p.startsWith('/') &&
+              !p.includes('\\') &&
+              !p.split('/').some((seg) => seg === '' || seg === '.' || seg === '..'),
+          )
+        if (!ok) fail(`${label}：providerState.${provider}.paths 须是 1 到 8 个不含 .. 的相对路径`)
+      }
+    }
+  }
   const source = parseSource(entry.source, label)
   if (source) parsed.push({ ...entry, ...source, label })
 })
