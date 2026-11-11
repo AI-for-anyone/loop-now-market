@@ -35,6 +35,24 @@
       "verified": true
     },
     {
+      "id": "pi-grok-cli",
+      "source": "npm:pi-grok-cli",
+      "version": "0.9.4",
+      "displayName": "Grok CLI",
+      "description": {
+        "zh-CN": "社区 Pi 扩展 pi-grok-cli：用 SuperGrok 或 X Premium 订阅登录，让 Agent 使用 Grok 模型。非 xAI 官方；订阅账号按项目登录、按 Agent 选择。",
+        "en-US": "Community Pi extension pi-grok-cli: run Agents on Grok models with a SuperGrok or X Premium subscription. Not an official xAI integration. Accounts are added per project and chosen per Agent."
+      },
+      "verified": true,
+      "providerState": {
+        "grok-cli": {
+          "paths": [
+            ".pi/grok-cli"
+          ]
+        }
+      }
+    },
+    {
       "id": "slack",
       "source": "git:https://github.com/AI-for-anyone/loop-now-plugin-slack@v0.1.4",
       "version": "0.1.4",
